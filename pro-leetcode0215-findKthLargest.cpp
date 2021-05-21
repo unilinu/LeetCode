@@ -12,7 +12,21 @@ public:
         }
         return pq.top();
     }
-    int findKthLargest(vector<int>& nums, int k) { // 快速交换 
+    int findKthLargest2(vector<int> &nums, int k) { // 快速交换
+        auto first = nums.begin(), last = nums.end();
+        while (true) {
+            auto pivot = *std::next(first, std::distance(first, last) / 2); // auto pivot=*first;
+            auto middle = partition(first, last, [pivot](const int &em) { return em >= pivot; });
+            if (middle == nums.begin() + k) // 找到pivot
+                return pivot;
+            else if (middle - nums.begin() > k) { // 规模缩减小于pivot及pivot，缩减规模>=1，避免死循环
+                swap(*(middle-1), *find(first, middle, pivot));
+                last = middle - 1;
+            } else // 规模缩减大于等于pivot，缩减规模>=1，，避免死循环
+                first = middle;
+        }
+    }
+    int findKthLargest3(vector<int>& nums, int k) { // findKthLargest2的低级版本，帮助理解partition
         auto first=nums.begin(), last=nums.end();
         while(true){
             auto pivot = *std::next(first, std::distance(first,last)/2); // auto pivot=*first;
