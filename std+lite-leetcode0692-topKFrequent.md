@@ -43,6 +43,13 @@ Language: C++
 class Solution {
 public:
     vector<string> topKFrequent(vector<string>& words, int k) {
+        // ordered_map or priority_queue
+    }
+    vector<string> topKFrequent(vector<string>& words, int k) {
+        // coding my partition 
+        // std partition twice
+    }
+    vector<string> topKFrequent(vector<string>& words, int k) {
         unordered_map<string, int> map;
         for(string& word:words)
             ++map[word];
