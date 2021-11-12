@@ -1,4 +1,4 @@
-# [LeetCode 刷题笔记](https://unilinu.github.io/LeetCode/)
+# [LeetCode 刷题笔记](https://github.io/unilinu/LeetCode/)
 
 
 ## LeetCode 101 思维导图

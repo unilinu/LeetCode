@@ -57,7 +57,7 @@ public:
 
         if(head==nullptr || head->next==nullptr) return head;
         ListNode *fast=head->next, *slow=head; // when head->size() equals 2, fast assignned with head
-                                               // instead of head->next leads function stack to overflow
+                                               // instead of head->next leads function stack overflow
         while(fast!=nullptr && fast->next!=nullptr){
             fast=fast->next->next;
             slow=slow->next;
