@@ -50,6 +50,7 @@ public:
 #### 	605. Can Place Flowers （easy)
 
 ```cpp
+// ugly version
 class Solution {
 public:
     bool canPlaceFlowers(vector<int>& flowerbed, int n) {
@@ -79,6 +80,55 @@ public:
         
         
                 
+    }
+};
+```
+
+```cpp
+// smart version
+class Solution {
+public:
+    bool canPlaceFlowers(vector<int>& flowerbed, int n) {
+        int can=0;
+        int len=flowerbed.size();
+        if(len<n) return false;
+        if(len==0) return true;
+        
+        vector<int> auxbed(len+2,0);
+        copy(flowerbed.begin(), flowerbed.end(), auxbed.begin()+1);
+    
+        for(int i=1; i<len+1; ++i)
+            if(auxbed[i-1]==0 && auxbed[i]==0 && auxbed[i+1]==0 ){
+                auxbed[i]=1;
+                ++can;
+            }
+        return can >= n; 
+    }
+};
+// samely smart version
+class Solution {
+public:
+    bool canPlaceFlowers(vector<int>& flowerbed, int n) {
+        int can=0;
+        int len=flowerbed.size();
+        if(len<n) return false;
+        if(len==0) return true;
+        if(len==1) return flowerbed[0]==0?1>=n:0>=n;
+        
+        if(flowerbed[0]==0 && flowerbed[1]==0){
+            flowerbed[0]=1; ++can;
+        }
+        if(flowerbed[len-1]==0 && flowerbed[len-2]==0){
+            flowerbed[len-1]=1; ++can;
+        }
+            
+        for(int i=1; i<len-1; ++i)
+            if(flowerbed[i-1]==0 && flowerbed[i]==0 && flowerbed[i+1]==0 ){
+                flowerbed[i]=1;
+                ++can;
+            }
+        return can >= n;
+      
     }
 };
 ```
