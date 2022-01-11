@@ -18,7 +18,6 @@ public:
 ```
 
 
-
 #### 135 Candy (hard)
 
 ```cpp
@@ -133,7 +132,48 @@ public:
 };
 ```
 
+#### [435. 无重叠区间](https://leetcode-cn.com/problems/non-overlapping-intervals/)
 
+```CPP
+class Solution {
+public:
+    int eraseOverlapIntervals(vector<vector<int>>& intervals) {
+        if(intervals.size()<2) return 0;
+        // todo 自定义匿名比较函数-以区间左端点排序
+        sort(intervals.begin(), intervals.end(), [](const auto& u, const auto& v) {
+            return u[0] < v[0];
+        });
+        int remove=0;
+        int tag=intervals[intervals.size()-1][0];
+        for(int i=intervals.size()-2; i>=0; --i){
+            if(intervals[i][1]>tag)
+                ++remove;
+            else
+                tag=intervals[i][0];
+        }
+        return remove;
 
+    }
+};
+```
 
+#### 452. Arrows to Burst Balloons
+
+```cpp
+class Solution {
+public:
+    int findMinArrowShots(vector<vector<int>>& points) {
+        if(points.size()<2) 
+            return points.size();
+        sort(points.begin(), points.end(), [](const auto& l, const auto& r){ return l[1]<r[1]; });
+        int num=1, move=points[0][1];
+        for(auto& item:points)
+            if(item[0]>move){
+                ++num;
+                move=item[1];
+            }
+        return num;
+    }
+};
+```
 
