@@ -177,3 +177,28 @@ public:
 };
 ```
 
+#### 665. Non-decreasing Array
+
+```cpp
+class Solution {
+public:
+    bool checkPossibility(vector<int>& nums) {
+        int len=nums.size();
+        if(len<3) return true;
+        // if(len==3) return nums[0]>nums[1]&&nums[1]>nums[2]?false:true;
+        int least=0;
+        for(int i=1;i<len && least<2;++i){
+            if(nums[i]>=nums[i-1]) continue;
+            if(i==len-1) { ++least; continue; }
+            if(nums[i+1]<nums[i]) return false;
+            if(i==1){ ++least; continue; }
+            if(!(nums[i-2]<=nums[i] || nums[i-1]<=nums[i+1])) return false;
+            ++least;
+        }
+        return least<2?true:false;
+        
+    }
+};
+
+```
+
