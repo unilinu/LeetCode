@@ -1,3 +1,5 @@
+### 贪心
+
 #### 455 Assign cookies (easy)
 
 ```cpp
@@ -200,5 +202,47 @@ public:
     }
 };
 
+```
+
+### 双指针
+
+#### 167. Two Sum II - Input Array Is Sorted
+
+```cpp
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        // index solution
+        int left=0, right=numbers.size()-1;
+        while(left<right)
+            numbers[left]+numbers[right]<target ? ++left : --right;
+        return vector<int>{left+1, right+1};
+
+        // iterator/pointer solution
+        // auto left=numbers.begin(), right=numbers.end()-1;
+        // while((*left+*right)!=target)
+        //     (*left+*right)>target ? --right : ++left;
+        // return vector<int>{left-numbers.begin()+1, right-numbers.begin()+1};
+
+
+    }
+};
+```
+
+
+
+#### 88. Merge Sorted Array
+
+```cpp
+class Solution {
+public:
+    void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+        int pos=m-- + n-- -1;
+        while(m>=0 && n>=0)
+            nums1[pos--] = nums1[m]>nums2[n]?nums1[m--]:nums2[n--];
+        while(n>=0)
+            nums1[pos--]=nums2[n--];
+    }
+};
 ```
 
