@@ -276,5 +276,38 @@ public:
             return fast;
         }
 };
+
+
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) { 
+        if(head==nullptr || head->next==nullptr) return nullptr;
+        ListNode *slow=head, *fast=head->next;
+        while(fast==nullptr || fast->next==nullptr || fast!=slow){
+            slow=slow->next;
+            fast=fast->next->next;
+        }
+        if(fast==nullptr || fast->next==nullptr) return nullptr;
+        
+        // 初值fast=head->next会导致死循环
+        // find start of circle
+        ListNode *third=head;
+        while(third!=slow){
+            third=third->next;
+            slow=slow->next;
+        }
+        
+        // find length of circle
+        int length=0;
+        slow=fast;
+        do {
+            ++length;
+            slow=slow->next;
+            fast=fast->next->next;
+        } while(slow!=fast);
+        cout<<length;
+        return third;
+    }    
+};
 ```
 
