@@ -249,53 +249,25 @@ public:
 #### 142. Linked List Cycle II
 
 ```cpp
-/**
- * Definition for singly-linked list.
- * struct ListNode {
- *     int val;
- *     ListNode *next;
- *     ListNode(int x) : val(x), next(NULL) {}
- * };
- */
 class Solution {
 public:
-    ListNode *detectCycle(ListNode *head) { 
-        ListNode *slow = head, *fast = head; 
-        // 判断是否存在环路
-        do {
-               if (!fast || !fast->next) return nullptr;
-               fast = fast->next->next;
-               slow = slow->next;
-        } while (fast != slow); 
-        // 如果存在，查找环路节点 
-        fast = head;
-        while (fast != slow){
-               slow = slow->next;
-               fast = fast->next;
-            }
-            return fast;
-        }
-};
-
-
-class Solution {
-public:
-    ListNode *detectCycle(ListNode *head) { 
+    ListNode *detectCycle(ListNode *head) { //version 1
         if(head==nullptr || head->next==nullptr) return nullptr;
-        ListNode *slow=head, *fast=head->next;
+        ListNode *slow=head, *fast=head->next; // error1
         while(fast==nullptr || fast->next==nullptr || fast!=slow){
             slow=slow->next;
             fast=fast->next->next;
         }
         if(fast==nullptr || fast->next==nullptr) return nullptr;
         
-        // 初值fast=head->next会导致死循环
         // find start of circle
         ListNode *third=head;
+        slow=slow->next; // repair error1
         while(third!=slow){
             third=third->next;
             slow=slow->next;
         }
+      	return third;
         
         // find length of circle
         int length=0;
@@ -305,9 +277,32 @@ public:
             slow=slow->next;
             fast=fast->next->next;
         } while(slow!=fast);
-        cout<<length;
+    }
+  
+    ListNode *detectCycle(ListNode *head) { // right version
+      
+        // ListNode *slow=head, *fast=head;
+        // while(fast!=nullptr&&fast->next!=nullptr && fast!=slow){
+        //     slow=slow->next;
+        //     fast=fast->next->next;
+        // } // invaild loop
+      
+      
+        ListNode *slow=head, *fast=head; //slow和fast需要先分开 do{}while()
+        do {
+            if(fast==nullptr || fast->next==nullptr) return nullptr;
+            slow=slow->next;
+            fast=fast->next->next;
+        } while(fast!=slow);
+        
+        // find start of circle
+        ListNode *third=head;
+        while(third!=slow){
+            third=third->next;
+            slow=slow->next;
+        }
         return third;
-    }    
+    }
 };
 ```
 
