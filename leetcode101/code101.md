@@ -1,6 +1,6 @@
-### 贪心
+## 贪心
 
-#### 455 Assign cookies (easy)
+### 455 Assign cookies (easy)
 
 ```cpp
 class Solution {
@@ -20,7 +20,7 @@ public:
 ```
 
 
-#### 135 Candy (hard)
+### 135 Candy (hard)
 
 ```cpp
 class Solution {
@@ -48,7 +48,7 @@ public:
 };
 ```
 
-#### 	605. Can Place Flowers （easy)
+### 	605. Can Place Flowers （easy)
 
 ```cpp
 // ugly version
@@ -134,7 +134,7 @@ public:
 };
 ```
 
-#### [435. 无重叠区间](https://leetcode-cn.com/problems/non-overlapping-intervals/)
+### [435. 无重叠区间](https://leetcode-cn.com/problems/non-overlapping-intervals/)
 
 ```CPP
 class Solution {
@@ -159,7 +159,7 @@ public:
 };
 ```
 
-#### 452. Arrows to Burst Balloons
+### 452. Arrows to Burst Balloons
 
 ```cpp
 class Solution {
@@ -179,7 +179,7 @@ public:
 };
 ```
 
-#### 665. Non-decreasing Array
+### 665. Non-decreasing Array
 
 ```cpp
 class Solution {
@@ -204,9 +204,9 @@ public:
 
 ```
 
-### 双指针
+## 双指针
 
-#### 167. Two Sum II - Input Array Is Sorted
+### 167. Two Sum II - Input Array Is Sorted
 
 ```cpp
 class Solution {
@@ -231,7 +231,7 @@ public:
 
 
 
-#### 88. Merge Sorted Array
+### 88. Merge Sorted Array
 
 ```cpp
 class Solution {
@@ -245,6 +245,8 @@ public:
     }
 };
 ```
+
+### 快慢指针
 
 #### 142. Linked List Cycle II
 
@@ -305,4 +307,46 @@ public:
     }
 };
 ```
+
+### 滑动窗口
+
+#### 76. Minimum Window Substring
+
+```cpp
+class Solution {
+public:
+    string minWindow(string s, string t) {
+        int l=0, r=0, ml=-1, mr=s.size(), cnt=0;
+        vector<int> stat(128, 0);
+        vector<bool> exist(128, false);
+
+        for(auto c:t){
+            ++cnt;
+            ++stat[c];
+            exist[c]=true;
+        }
+
+        for(r=0;r<s.size();++r){
+            if(exist[s[r]] && --stat[s[r]]>=0)
+                --cnt;
+            if(cnt==0 && r-l<mr-ml){
+                ml=l; mr=r;
+            }
+            while(cnt==0 && l<=r){
+                if(exist[s[l]] && ++stat[s[l]]>0){
+                    ++cnt;
+                    if(r-l<mr-ml){
+                        ml=l; mr=r;
+                    }
+                }
+                ++l;
+            }
+        }
+        return ml==-1?"":s.substr(ml, mr-ml+1);
+    }
+};
+
+```
+
+
 
