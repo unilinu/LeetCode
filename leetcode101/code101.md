@@ -206,7 +206,9 @@ public:
 
 ## 双指针
 
-### 167. Two Sum II - Input Array Is Sorted
+### 左右指针
+
+#### 167. Two Sum II - Input Array Is Sorted
 
 ```cpp
 class Solution {
@@ -228,6 +230,51 @@ public:
     }
 };
 ```
+
+#### 633. Sum of Square Numbers
+
+```
+class Solution {
+public:
+    bool judgeSquareSum(int c) {
+        long long a=0, b=sqrt(c);
+        while(a<=b){
+            long long sum=a*a+b*b;
+            if(sum==c) return true;
+            else if(sum>c) --b;
+            else ++a;
+        }
+        return false;
+    }
+};
+```
+
+
+
+#### 680. 验证回文字符串 Ⅱ
+
+```cpp
+class Solution {
+public:
+    bool help(const string& s) { //改为匿名函数
+        for(int l=0, r=s.size()-1; l<r; ++l, --r)
+            if(s[l]!=s[r]) return false;
+        return true;
+    }
+    bool validPalindrome(string s) {
+        for(int l=0, r=s.size()-1; l<r; ++l, --r){
+            if(s[l]!=s[r]){
+                bool dl=help(s.substr(l+1, r-l));
+                bool dr=help(s.substr(l, r-l));
+                return dl||dr;
+            }
+        }
+        return true;
+    }
+};
+```
+
+
 
 
 
@@ -347,6 +394,24 @@ public:
 };
 
 ```
+### 二分查找
 
+#### 69. Sqrt(x) (Easy) 
+```cpp
+class Solution {
+public:
+    int mySqrt(int x) {
+        int l=1, r=x, mid;
+        while(l<=r){
+            mid=l+(r-l)/2;
+            int sqrt=x/mid;
+            if(sqrt==mid) return mid;
+            else if(sqrt>mid) l=mid+1;
+            else r=mid-1;
+        }
+        return r;
+    }
+};
+```
 
 
