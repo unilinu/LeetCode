@@ -394,7 +394,7 @@ public:
 };
 
 ```
-### 二分查找
+## 二分查找
 
 #### 69. Sqrt(x) (Easy) 
 ```cpp
@@ -493,53 +493,63 @@ public:
 
 ### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
 
+```python
+class Solution(object):
+    def findKthLargest(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: int
+        """
+        if(len(nums)<2):
+            return nums[0]
+        
+        l=0
+        r=len(nums)-1
+        mid=nums[0]
+        
+        while(l<r):
+            while(l<r and nums[r]>=mid):
+                r=r-1
+            nums[l]=nums[r]
+            while(l<r and nums[l]<=mid):
+                l=l+1
+            nums[r]=nums[l]
+        nums[l]=mid
+        
+        rlen=len(nums)-l
+        if(rlen==k):
+            return nums[l]
+        if(rlen>k):
+            return self.findKthLargest(nums[l+1:], k)
+        else:
+            return self.findKthLargest(nums[:l], k-rlen)
+
+```
+### 347. Top K Frequent Elements
 ```cpp
+347. Top K Frequent Elements
 class Solution {
 public:
-    int findKthLargest1(vector<int>& nums, int k) {
-        auto cmp = [](int i, int j) { return (i>j); };
-        priority_queue<int, vector<int>, decltype(cmp) > pq(nums.begin(), nums.begin()+k, cmp);
-        for(int i=k;i<nums.size();++i){
-            pq.push(nums[i]);
-            pq.pop();
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        unordered_map<int, int> cnt;
+        for(int num:nums)
+            ++cnt[num];
+        int max_cnt=0;
+        for(auto i:cnt)
+            max_cnt=max(max_cnt, i.second);
+        vector<vector<int> > bkt(max_cnt+1);
+        for(auto i:cnt)
+            bkt[i.second].push_back(i.first);
+        vector<int> res;
+        for(int i=max_cnt;i>=0;--i){
+            for(int num:bkt[i])
+                res.push_back(num);
+            if(res.size()==k)
+                break;
         }
-        return pq.top();
-    }
-    
-    int findKthLargest(vector<int> &nums, int k) {
-        auto first = nums.begin(), last = nums.end();
-        cout<<nums.size()<<endl;
-        while (true) {
-            auto pivot = *std::next(first, std::distance(first, last) / 2); // auto pivot=*first;
-            auto middle = partition(first, last, [pivot](const int &em) { return em >= pivot; });
-            if (middle == nums.begin() + k) // 找到pivot
-                return pivot;
-            else if (middle - nums.begin() > k) { // 规模缩减小于pivot及pivot，缩减规模>=1，避免死循环
-                swap(*(middle-1), *find(first, middle, pivot));
-                last = middle - 1;
-            } else // 规模缩减大于等于pivot，缩减规模>=1，，避免死循环
-                first = middle;
-        }
-    }
-    int findKthLargest3(vector<int>& nums, int k) { // findKthLargest的低级版本，帮助理解partition
-        auto first=nums.begin(), last=nums.end();
-        while(true){
-            auto pivot = *std::next(first, std::distance(first,last)/2); // auto pivot=*first;
-            auto middle1=partition(first, last, [pivot](const int& em){ return em>pivot; }); // 主要需要交换两次，避免死循环：pivot为max/min/equal
-            auto middle2=partition(middle1, last, [pivot](const int& em){ return em>=pivot; });
-    //        cout<<pivot<<' '<<*middle<<endl;
-            if(distance(first, first+k) <= distance(first, middle1))
-                last=middle1;
-            else if(distance(first, first+k) <= distance(first, middle2)){
-                return *middle1;
-
-            }
-            else {
-                k-=(int)distance(first, middle2);
-                first=middle2;
-            }
-        }
+        return res;
     }
 };
-```
 
+```
