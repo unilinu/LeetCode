@@ -553,3 +553,180 @@ public:
 };
 
 ```
+
+## 搜索
+
+### DFS
+
+#### 547. Number of Provinces
+
+```cpp
+class Solution {
+public:
+    int findCircleNum(vector<vector<int>>& isConnected) {
+        int n=isConnected.size();
+        int circle=0;
+        for(int i=0; i<n; ++i){
+            if(isConnected[i][i])
+                ++circle;
+            dfs(isConnected, i);
+        }
+        return circle;
+    }
+    void dfs(vector<vector<int>>& isConnected, int k){
+        isConnected[k][k]=0;
+        for(int i=0;i<isConnected[k].size();++i)
+            if(isConnected[k][i]==1 && isConnected[i][i]==1)
+                dfs(isConnected, i);
+        return;
+    }
+};
+
+```
+
+
+
+#### 417. Pacific Atlantic Water Flow
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> pacificAtlantic(vector<vector<int>>& heights) {
+        int m=heights.size(), n=heights[0].size();
+        vector<vector<int>> code(m, vector<int>(n, 0));
+        for(int i=0;i<n;++i){
+            dfs(heights, code, 0, i, 1);
+            dfs(heights, code, m-1, i, 2);
+        }
+        for(int i=1;i<m;++i){
+            dfs(heights, code, i, 0, 1);
+            dfs(heights, code, m-1-i, n-1, 2);
+        }
+        
+        vector<vector<int>> res;
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j)
+                if(code[i][j]==3)
+                    res.push_back(vector<int>{i ,j});
+            
+        return res; 
+    }
+    void dfs(vector<vector<int>>& heights, vector<vector<int>>& code, int x, int y, int k){
+        
+        if(code[x][y]==k || code[x][y]==3) return;
+        code[x][y]+=k;
+        
+        vector<int> dir{0, -1, 0, 1, 0};
+        int m=heights.size(), n=heights[0].size();
+        for(int i=0;i<4;++i){
+            int p=x+dir[i], q=y+dir[i+1];
+            if(p>=0 && p<=m-1 && q>=0 && q<=n-1 && 
+               heights[x][y]<=heights[p][q])
+                dfs(heights, code, p, q, k);
+        }
+    }
+};
+```
+
+
+
+### 回溯
+
+#### 46. Permutations
+
+```cpp
+class Solution {
+public:
+    vector<vector<int>> permute(vector<int>& nums) {
+        vector<vector<int>> res;
+        vector<bool> memo(nums.size(), false);
+        vector<int> subres;
+        backtracking(nums, res, subres, memo, 0);
+        return res;
+    }
+    void backtracking(vector<int>& nums, vector<vector<int>>& res, vector<int>& subres, vector<bool>& memo, int level){
+        
+            if(level>=nums.size()){
+                res.push_back(subres);
+                // return;
+            }
+            for(int i=0; i<memo.size(); ++i){
+                if(!memo[i]){
+                    subres.push_back(nums[i]);
+                    memo[i]=true;
+                    backtracking(nums, res, subres, memo, level+1);
+                    memo[i]=false;
+                    subres.pop_back();
+                }
+            }
+        }
+
+
+};
+```
+
+
+
+### BFS
+
+### 934. Shortest Bridge
+
+```cpp
+class Solution {
+public:
+    int shortestBridge(vector<vector<int>>& grid) {
+        int m=grid.size()-1, n=grid[0].size()-1;
+        queue<pair<int,int>> points;
+        bool flag=true;
+        for(int i=0;i<=m&&flag;++i)
+            for(int j=0;j<=n;++j)
+                if(grid[i][j]){
+                    flag=false;
+                    dfs(points, grid, {i,j}, {m,n});
+                    break;
+                }
+        // bfs
+        int step=0;
+        while(!points.empty()){
+            int np=points.size();
+            while(np--){
+                pair<int, int> coor=points.front();
+                points.pop();
+                vector<int> dir={-1, 0, 1, 0, -1};
+                for(int i=0;i<4;++i){
+                    int x=coor.first+dir[i], y=coor.second+dir[i+1];
+                    if(x>=0&&x<=m&&y>=0&&y<=n) {
+                        if(grid[x][y]==1) return step;
+                        if(grid[x][y]==0){
+                            grid[x][y]=2;
+                            points.push({x, y});
+                        }
+                        
+                    }
+                }
+            }
+            ++step;
+        }
+        return 0;
+    }
+    void dfs(queue<pair<int,int>>& points, vector<vector<int>>& grid, pair<int,int> coor, pair<int, int> bound) {
+        grid[coor.first][coor.second]=2;
+        points.push(coor);
+        
+        vector<int> dir{-1, 0, 1, 0, -1};
+        for(int i=0;i<4;++i){
+            int x=coor.first+dir[i], y=coor.second+dir[i+1];
+            if(x>=0&&x<=bound.first&&y>=0&&y<=bound.second&&grid[x][y]==1){
+                dfs(points, grid, {x, y}, bound);
+            }
+        }
+    }
+};
+
+
+```
+
+
+
+
+
