@@ -669,7 +669,7 @@ public:
 
 ### BFS
 
-### 934. Shortest Bridge
+#### 934. Shortest Bridge
 
 ```cpp
 class Solution {
@@ -726,7 +726,66 @@ public:
 
 ```
 
+## DP
 
+### 542. 01 Matrix
 
+```CPP
+class Solution {
+public:
+    vector<vector<int>> updateMatrix(vector<vector<int>>& mat) {
+        int m=mat.size(), n=mat[0].size();
+        vector<vector<int>> res(m, vector<int>(n, INT_MAX-1));
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j)
+                if(mat[i][j]==0)
+                    res[i][j]=0;
+                else {
+                    if(j>0)
+                        res[i][j]=min(res[i][j], res[i][j-1]+1);
+                    if(i>0)
+                        res[i][j]=min(res[i][j], res[i-1][j]+1);
+                }
+        // back to left top
+        for(int i=m-1;i>=0;--i)
+            for(int j=n-1;j>=0;--j)
+                if(mat[i][j]==0) 
+                    res[i][j]=0;
+                else {
+                    if(j<n-1)
+                        res[i][j]=min(res[i][j], res[i][j+1]+1);
+                    if(i<m-1)
+                        res[i][j]=min(res[i][j], res[i+1][j]+1);
+                }
+                            
+        return res;
+    }
+};
+```
 
+### 221. Maximal Square
+
+```cpp
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        if(matrix.size()==0||matrix[0].size()==0) return 0;
+        int max_edge=0;
+        int m=matrix.size(), n=matrix[0].size();
+        vector<vector<int>> dp(m, vector<int>(n, 0));
+        for(int i=0;i<m;++i)
+            for(int j=0;j<n;++j){
+                if(i==0 || j==0)
+                    dp[i][j]=matrix[i][j]-'0';
+                else if(matrix[i][j]=='1')
+                    dp[i][j]=min(min(dp[i-1][j], dp[i][j-1]), dp[i-1][j-1])+1;
+                
+                max_edge=max(max_edge, dp[i][j]);
+            }
+        return max_edge*max_edge;
+
+        
+    }
+};
+```
 
