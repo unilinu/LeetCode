@@ -728,7 +728,9 @@ public:
 
 ## DP
 
-### 542. 01 Matrix
+### 二维
+
+#### 542. 01 Matrix
 
 ```CPP
 class Solution {
@@ -763,7 +765,7 @@ public:
 };
 ```
 
-### 221. Maximal Square
+#### 221. Maximal Square
 
 ```cpp
 class Solution {
@@ -789,3 +791,83 @@ public:
 };
 ```
 
+### 分割
+
+#### 91. Decode Ways
+
+```cpp
+class Solution {
+public:
+    int numDecodings(string s) {
+        int n=s.size();
+        if(n==1&&s[0]=='0') return 0;
+        if(n<2) return n;
+        vector<int> dp(n+1);
+        dp[0]=1;
+        dp[1]=1;
+        int pre, cur;
+        for(int i=2;i<=n;++i){
+            pre=s[i-2]-'0';
+            cur=s[i-1]-'0';
+            int temp=pre*10+cur;
+            if(cur==0){
+                if(pre==1||pre==2)
+                    dp[i]=dp[i-2];
+                else
+                    return 0;
+            }
+            else if(i-2==0&&pre==0)
+                return 0;
+            else if(temp>26||temp<10)
+                dp[i]=dp[i-1];
+            else 
+                dp[i]=dp[i-1]+dp[i-2];
+                
+        }
+        return dp[n];  
+    }
+};
+
+
+```
+### 子序列
+#### 300. Longest Increasing Subsequence
+```cpp
+class Solution {
+public:
+    int lengthOfLIS(vector<int>& nums) {
+        int n=nums.size();
+        
+        vector<int> dp(n, 1);
+        int max_len=0;
+        for(int i=0;i<n;++i){
+            for(int j=i-1;j>=0;--j){
+                if(nums[i]>nums[j])
+                    dp[i]=max(dp[i], dp[j]+1);
+            }
+            max_len=max(max_len, dp[i]);
+        }
+        return max_len;
+        
+    }
+};
+```
+#### 1143. Longest Common Subsequence
+```cpp
+class Solution {
+public:
+    int longestCommonSubsequence(string text1, string text2) {
+        int m=text1.size(), n=text2.size();
+        vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+        for(int i=0;i<m;++i){
+            for(int j=0;j<n;++j){
+                if(text1[i]==text2[j])
+                    dp[i+1][j+1]=dp[i][j]+1;
+                else 
+                    dp[i+1][j+1]=max(dp[i][j+1], dp[i+1][j]);
+            }
+        }
+        return dp[m][n];
+    }
+};
+```
