@@ -832,6 +832,7 @@ public:
 ```
 ### 子序列
 #### 300. Longest Increasing Subsequence
+一维DP
 ```cpp
 class Solution {
 public:
@@ -853,6 +854,7 @@ public:
 };
 ```
 #### 1143. Longest Common Subsequence
+二维DP
 ```cpp
 class Solution {
 public:
@@ -868,6 +870,73 @@ public:
             }
         }
         return dp[m][n];
+    }
+};
+```
+### 编辑字符串
+#### 72. Edit Distance
+```cpp
+class Solution {
+public:
+    int minDistance(string word1, string word2) {
+        int m=word1.size(), n=word2.size();
+        vector<vector<int>> dp(m+1, vector<int>(n+1, 0));
+        for(int i=0;i<=m;++i)
+            dp[i][0]=i;
+        for(int i=0;i<=n;++i)
+            dp[0][i]=i;
+        for(int i=1;i<=m;++i)
+            for(int j=1;j<=n;++j){ // 打表 考虑所有修改情况
+                dp[i][j] = word1[i-1]==word2[j-1] ? dp[i-1][j-1] : 
+                    min(dp[i-1][j-1], min(dp[i-1][j], dp[i][j-1]))+1;
+            }
+        return dp[m][n];
+    }
+};
+```
+#### 650. 2 Keys Keyboard
+```cpp
+class Solution {
+public:
+    int minSteps(int n) {
+        vector<int> dp(n+1, 0);
+        for(int i=2;i<=n;++i){
+            dp[i]=i;
+            for(int j=2;j*j<=i;++j)
+                if(i%j==0) // 倍数/因数类DP
+                    dp[i]=dp[j]+dp[i/j];
+        }
+        return dp[n];
+    }
+};
+```
+#### 10. Regular Expression Matching
+
+```cpp
+class Solution {
+public:
+    bool isMatch(string s, string p) {
+        int m=s.size(), n=p.size();
+        vector<vector<bool>> dp(m+1, vector<bool>(n+1, false));
+        for(int i=2;i<=n&&p[i-1]=='*';i+=2){
+            dp[0][i]=true;
+        }
+        dp[0][0]=true;
+        dp[1][1]=(p[0]=='.'||p[0]==s[0])?true:false;
+        
+        for(int i=1;i<=m;++i)
+            for(int j=2;j<=n;++j){
+                if(p[j-1]=='*'){ //考虑所有情况 1消耗 2同归 3直接走
+                    if(p[j-2]==s[i-1]||p[j-2]=='.')
+                        dp[i][j]=dp[i-1][j-2]||dp[i-1][j];
+                    dp[i][j]=dp[i][j]||dp[i][j-2];
+                }
+                else if(p[j-1]=='.' || p[j-1]==s[i-1])
+                    dp[i][j]=dp[i-1][j-1];
+                else
+                    dp[i][j]=false;
+            }
+        return dp[m][n];     
     }
 };
 ```
