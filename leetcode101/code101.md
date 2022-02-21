@@ -940,3 +940,50 @@ public:
     }
 };
 ```
+## 分治
+### 932. 漂亮数组
+```cpp
+class Solution {
+public:
+    vector<int> beautifulArray(int n) {
+        if(n==1) return {1};
+        vector<int> ans;
+        vector<int> temp=beautifulArray((n+1)/2);
+        for(auto item:temp){
+            ans.push_back(2*item-1);
+        }
+        for(auto item:temp){
+            if(2*item<=n)
+                ans.push_back(2*item);
+        }
+        return ans;
+    }
+};
+```
+### 241. Different Ways to Add Parentheses
+```cpp
+class Solution {
+public:
+    vector<int> diffWaysToCompute(string input) {
+        int n=input.size();
+        vector<int> ways;
+        for(int i=0;i<n;++i){
+            char punc=input[i];
+            if(punc>='0' && punc<='9') continue;
+            vector<int> left=diffWaysToCompute(input.substr(0, i));
+            vector<int> right=diffWaysToCompute(input.substr(i+1));
+            for(auto l:left)
+                for(auto r:right){
+                    switch(punc){
+                    case '+':ways.push_back(l+r);break;
+                    case '-':ways.push_back(l-r);break;
+                    case '*':ways.push_back(l*r);break;
+                    }
+                }
+        }
+        if(ways.empty()) ways.push_back(stoi(input));
+        return ways;
+    }
+    
+};
+```
