@@ -553,6 +553,27 @@ public:
 };
 
 ```
+### 75. Sort Colors
+```cpp
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int l=0, r=nums.size()-1;
+        while(l<r){
+            while(l<r&&nums[r]!=0) --r;
+            while(l<r&&nums[l]==0) ++l;
+            swap(nums[l], nums[r]);   
+        }
+        r=nums.size()-1;
+        while(l<r){
+            while(l<r&&nums[r]==2) --r;
+            while(l<r&&nums[l]!=2) ++l;
+            swap(nums[l], nums[r]);   
+        }       
+    }
+};
+```
+
 
 ## 搜索
 
@@ -987,3 +1008,53 @@ public:
     
 };
 ```
+
+
+
+## 巧解数学
+
+### 415. Add Strings
+
+```cpp
+class Solution {
+public:
+    string addStrings(string num1, string num2) {
+        int n1=num1.size(), n2=num2.size();
+        int n=max(n1, n2)+1;
+        vector<int> add(n, 0);
+        for(int i=n1-1;i>=0;--i)
+            add[--n]+=num1[i]-'0';
+        n=max(n1, n2)+1;
+        for(int i=n2-1;i>=0;--i)
+            add[--n]+=num2[i]-'0';
+        
+        string ans;
+        for(int i=add.size()-1;i>=0;--i){
+            cout<<add[i]<<' ';
+            ans=to_string(add[i]%10)+ans;
+            if(add[i]>=10)
+                ++add[i-1];
+        }
+        if(ans[0]=='0')
+            return ans.substr(1);
+        return ans;
+    }
+};
+```
+
+### 172. 阶乘后的零
+
+```cpp
+class Solution {
+public:
+    int trailingZeroes(int n) {
+        int cnt=0;
+        while(n>0){
+            n /= 5;
+            cnt+=n;
+        }
+        return cnt;
+    }
+};
+```
+
