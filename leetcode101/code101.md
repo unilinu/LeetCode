@@ -159,6 +159,48 @@ public:
 };
 ```
 
+```cpp
+// version 2
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        if(intervals.empty()) return {};
+        sort(intervals.begin(), intervals.end());
+        vector<vector<int>> ans;
+        ans.push_back(intervals[0]);
+        for(int i=1;i<intervals.size();++i){
+            int e=ans.size()-1;
+            if(intervals[i][0]<=ans[e][1])
+                ans[e][1]=max(ans[e][1], intervals[i][1]);
+            else
+                ans.push_back(intervals[i]);
+        }
+        return ans;
+    }
+};
+
+```
+
+### 240. Search a 2D Matrix II
+```cpp
+class Solution {
+public:
+    bool searchMatrix(vector<vector<int>>& matrix, int target) {
+        int m=matrix.size(), n=matrix[0].size();
+        for(int i=m-1,j=0;i>=0&&j<n;)
+            if(matrix[i][j]>target)
+                --i;
+            else if(matrix[i][j]<target)
+                ++j;
+            else
+                return true;
+        return false;
+    }
+};
+
+```
+
+
 ### 452. Arrows to Burst Balloons
 
 ```cpp
@@ -1058,3 +1100,19 @@ public:
 };
 ```
 
+## 妙用数据结构
+### 769. Max Chunks To Make Sorted
+```cpp
+class Solution {
+public:
+    int maxChunksToSorted(vector<int>& arr) {
+        int cur_max=0, chunk=0;
+        for(int i=0;i<arr.size();++i){
+            cur_max=max(cur_max,arr[i]);
+            if(cur_max==i)
+                ++chunk;
+        }
+        return chunk;
+    }
+};
+```
