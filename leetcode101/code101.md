@@ -1116,3 +1116,65 @@ public:
     }
 };
 ```
+## 栈和队列
+### 155. Min Stack
+```cpp
+class MinStack {
+    stack<int> s, min_s;
+public:
+    MinStack() {
+        
+    }
+    
+    void push(int val) {
+        s.push(val);
+        if(min_s.empty() || val<=min_s.top())
+            min_s.push(val);
+    }
+    
+    void pop() {
+        if(s.empty()) return;
+        if(s.top()==min_s.top())
+            min_s.pop();
+        s.pop();
+    }
+    
+    int top() {
+        return s.top();
+    }
+    
+    int getMin() {
+        return min_s.top();
+    }
+};
+
+/**
+ * Your MinStack object will be instantiated and called as such:
+ * MinStack* obj = new MinStack();
+ * obj->push(val);
+ * obj->pop();
+ * int param_3 = obj->top();
+ * int param_4 = obj->getMin();
+ */
+ ```
+### 739. Daily Temperatures
+```cpp
+
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        auto n=temperatures.size();
+        if(n==0) return {};
+        vector<int> ans(n);
+        stack<int> s;
+        for(int i=0;i<n;++i){
+            while(!s.empty()&&temperatures[i]>temperatures[s.top()]){
+                    ans[s.top()]=i-s.top();
+                    s.pop();
+                }
+            s.push(i);
+        }
+        return ans;
+    }
+};
+```
