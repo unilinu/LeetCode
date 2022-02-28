@@ -1100,7 +1100,32 @@ public:
 };
 ```
 
+#### [233. 数字 1 的个数](https://leetcode-cn.com/problems/number-of-digit-one/)
+
+[题解公式](https://leetcode-cn.com/problems/number-of-digit-one/solution/shu-zi-1-de-ge-shu-by-leetcode-solution-zopq/)
+
+```cpp
+class Solution {
+public:
+    int countDigitOne(int n) {
+        // mulk 表示 10^k
+        // 在下面的代码中，可以发现 k 并没有被直接使用到（都是使用 10^k）
+        // 但为了让代码看起来更加直观，这里保留了 k
+        long long mulk = 1;
+        int ans = 0;
+        for (int k = 0; n >= mulk; ++k) {
+            ans += (n / (mulk * 10)) * mulk + min(max(n % (mulk * 10) - mulk + 1, 0LL), mulk);
+            mulk *= 10;
+        }
+        return ans;
+    }
+};
+```
+
+
+
 ## 妙用数据结构
+
 ### 769. Max Chunks To Make Sorted
 ```cpp
 class Solution {
@@ -1156,7 +1181,7 @@ public:
  * int param_3 = obj->top();
  * int param_4 = obj->getMin();
  */
- ```
+```
 ### 739. Daily Temperatures
 ```cpp
 
@@ -1178,3 +1203,101 @@ public:
     }
 };
 ```
+### 优先队列
+```cpp
+class priority_queue(){
+    vector<int> heap(1); // heap[0]置空 //heap[1]=pq.top()
+public:
+    void swim(int pos){
+        while(pos>1 && heap[pos]>heap[pos/2]){
+            swap(heap[pos], heap[pos/2]);
+            pos/=2;
+        }
+    }
+    void sink(int pos){
+        int N=heap.size()-1;
+        while(2*pos<=N){
+            int lc=2*pos, rc=lc+1;
+            if(rc<=N&&heap[lc]<heap[rc]) lc=rc;
+            if(heap[lc]<=heap[pos]) break;
+            swap(heap[lc], heap[pos]);
+            pos=lc;
+        }
+    }
+}
+```
+
+### 23. Merge k Sorted Lists
+
+```cpp
+// REDIFINATION LISTNODE
+// struct ListNode {
+//     int val;
+//     ListNode *next;
+//     ListNode() : val(0), next(nullptr) {}
+//     ListNode(int x) : val(x), next(nullptr) {}
+//     ListNode(int x, ListNode *next) : val(x), next(next) {}
+//     bool operator < (ListNode* l, ListNode* r) { return l->val<r->val; }
+// };
+
+// struct CompObj {
+//     bool operator() (ListNode* l, ListNode* r) { return l->val<r->val; }
+// };
+// auto CompFun=[](ListNode* l, ListNode* r) { return l->val<r->val; };
+
+// 优先级队列
+// class Solution {
+// public:
+//     ListNode* mergeKLists(vector<ListNode*>& lists) {
+//         priority_queue<ListNode*, vector<ListNode*>, decltype(CompFun)> pq(CompFun);
+//         for(auto ls:lists){
+//             while(ls!=nullptr){
+//                 pq.push(ls);
+//                 ls=ls->next;
+//             }
+//         }
+//         ListNode* head=nullptr;
+//         while(!pq.empty()){
+//             auto max_pq=pq.top();
+//             pq.pop();
+//             max_pq->next=head;
+//             head=max_pq;
+//         }
+//         return head;
+//     }
+// };
+
+// 分治
+class Solution {
+public:
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        ListNode* head = nullptr;
+        ListNode** pre = &head, **node;
+        for(node = NULL;list1 && list2; *node = (*node)->next)
+        {
+            node = (list1->val < list2->val) ? &list1 : &list2;
+            *pre = *node;
+            pre = &(*node)->next;
+        }
+        *pre = (ListNode *)((uintptr_t) list1 | (uintptr_t)list2);
+        return head;
+    }
+    ListNode* mergeList(vector<ListNode*>& lists, int start, int end)
+    {
+        if(start==end) return lists[start];
+        int mid = (end - start)/2 + start;
+        ListNode* left = mergeList(lists, start, mid);
+        ListNode* right = mergeList(lists, mid+1, end);
+        
+        return mergeTwoLists(left, right);
+    }
+    ListNode* mergeKLists(vector<ListNode*>& lists) {
+        int size = lists.size();
+        if(size == 0)
+            return NULL;
+        else
+            return mergeList(lists, 0, size - 1);
+    }
+};
+```
+
