@@ -1122,8 +1122,6 @@ public:
 };
 ```
 
-
-
 ## 妙用数据结构
 
 ### 769. Max Chunks To Make Sorted
@@ -1141,7 +1139,8 @@ public:
     }
 };
 ```
-## 栈和队列
+### 栈和队列
+
 ### 155. Min Stack
 ```cpp
 class MinStack {
@@ -1204,6 +1203,7 @@ public:
 };
 ```
 ### 优先队列
+
 ```cpp
 class priority_queue(){
     vector<int> heap(1); // heap[0]置空 //heap[1]=pq.top()
@@ -1300,4 +1300,68 @@ public:
     }
 };
 ```
-
+### 218. 天际线问题
+```cpp
+class Solution1 {
+public:
+    vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
+        vector<pair<int,int>> od;
+        for(auto b:buildings){
+            od.push_back({b[0],-b[2]});
+            od.push_back({b[1],b[2]});
+        }
+        sort(od.begin(), od.end());
+        priority_queue<int> pq;
+        priority_queue<int> rm;
+        vector<vector<int>> ans;
+        
+        int prev=0, n=buildings.size();
+        pq.push(0);
+        for(auto p:od){
+            if(p.second<0)
+                pq.push(-p.second);
+            else if(p.second>0){
+                // cpp unsupport pq.erase(elem)
+                rm.push(p.second);
+            }
+            while(!rm.empty() && rm.top()==pq.top()){
+                    rm.pop(); pq.pop();
+            }
+            int cur=pq.top();
+            if(prev!=cur){
+                ans.push_back({p.first, cur});
+                prev=cur;
+            }
+        }
+        return ans;
+    }
+    
+};
+```
+```cpp
+vector<vector<int>> getSkyline(vector<vector<int>>& buildings) { 
+    vector<vector<int>> ans;
+    priority_queue<pair<int, int>> max_heap; // <高度, 右端>
+    int i = 0, len = buildings.size();
+    int cur_x, cur_h;
+    while (i < len || !max_heap.empty()) {
+        if (max_heap.empty() || i < len && buildings[i][0] <= max_heap.top().second) {
+            cur_x = buildings[i][0];
+            while (i < len && cur_x == buildings[i][0]) {
+                max_heap.emplace(buildings[i][2], buildings[i][1]);
+                ++i; 
+            }
+        } else {
+            cur_x = max_heap.top().second;
+            while (!max_heap.empty() && cur_x >= max_heap.top().second) {
+                max_heap.pop();
+            }
+        }
+        cur_h = (max_heap.empty()) ? 0 : max_heap.top().first;
+        if (ans.empty() || cur_h != ans.back()[1]) {
+            ans.push_back({cur_x, cur_h});
+        }
+    }
+    return ans; 
+}
+```
