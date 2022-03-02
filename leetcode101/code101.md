@@ -1365,3 +1365,47 @@ vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
     return ans; 
 }
 ```
+### 239. Sliding Window Maximum
+- version1
+```cpp
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        deque<int> dq;
+        vector<int> ans;
+        for(int i=0;i<nums.size();++i){
+            while(!(dq.empty()||nums[dq.back()]>nums[i])){
+                dq.pop_back();
+            }
+            dq.push_back(i);
+            if(dq.front()<=i-k)
+                dq.pop_front();
+            if(i>=k-1)
+                ans.push_back(nums[dq.front()]);
+        }
+        return ans;
+    }
+};
+```
+- version2
+```cpp
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        vector<int> ks;
+        vector<int> ans;
+        int front=0;
+        for(int i=0;i<nums.size();++i){
+            while(ks.size()>front && nums[ks.back()]<=nums[i]){
+                ks.pop_back();
+            }
+            ks.push_back(i);
+            if(ks[front]<=i-k)
+                ++front;
+            if(i>=k-1)
+                ans.push_back(nums[ks[front]]);
+        }
+        return ans;
+    }
+};
+```
