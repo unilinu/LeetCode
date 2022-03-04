@@ -1100,7 +1100,7 @@ public:
 };
 ```
 
-#### [233. 数字 1 的个数](https://leetcode-cn.com/problems/number-of-digit-one/)
+### [233. 数字 1 的个数](https://leetcode-cn.com/problems/number-of-digit-one/)
 
 [题解公式](https://leetcode-cn.com/problems/number-of-digit-one/solution/shu-zi-1-de-ge-shu-by-leetcode-solution-zopq/)
 
@@ -1124,7 +1124,10 @@ public:
 
 ## 妙用数据结构
 
-### 769. Max Chunks To Make Sorted
+### 数组
+
+#### 769. Max Chunks To Make Sorted
+
 ```cpp
 class Solution {
 public:
@@ -1141,7 +1144,8 @@ public:
 ```
 ### 栈和队列
 
-### 155. Min Stack
+#### 155. Min Stack
+
 ```cpp
 class MinStack {
     stack<int> s, min_s;
@@ -1181,7 +1185,8 @@ public:
  * int param_4 = obj->getMin();
  */
 ```
-### 739. Daily Temperatures
+#### 739. Daily Temperatures
+
 ```cpp
 
 class Solution {
@@ -1227,7 +1232,7 @@ public:
 }
 ```
 
-### 23. Merge k Sorted Lists
+#### 23. Merge k Sorted Lists
 
 ```cpp
 // REDIFINATION LISTNODE
@@ -1300,7 +1305,8 @@ public:
     }
 };
 ```
-### 218. 天际线问题
+#### 218. 天际线问题
+
 ```cpp
 class Solution1 {
 public:
@@ -1365,7 +1371,8 @@ vector<vector<int>> getSkyline(vector<vector<int>>& buildings) {
     return ans; 
 }
 ```
-### 239. Sliding Window Maximum
+#### 239. Sliding Window Maximum
+
 - version1
 ```cpp
 class Solution {
@@ -1409,3 +1416,82 @@ public:
     }
 };
 ```
+
+### 多重集合和映射
+
+#### 332. Reconstruct Itinerary
+
+```cpp
+class Solution {
+public:
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        vector<string> ans;
+        if (tickets.empty()) {
+            return ans; }
+        unordered_map<string, priority_queue<string,vector<string>, greater<string>>> hash; 
+        // unordered_map<string, multiset<string>> hash;         // 可以使用multiset
+        for (const auto & ticket: tickets) {
+           hash[ticket[0]].push(ticket[1]);
+        }
+        stack<string> s;
+        s.push("JFK");
+        while (!s.empty()) {
+           string next = s.top();
+           if (hash[next].empty()) {
+               ans.push_back(next);
+               s.pop();
+           } else {
+               s.push(hash[next].top());
+               hash[next].pop();
+           }
+        }
+        reverse(ans.begin(), ans.end());
+        return ans;
+    }
+};
+```
+
+## 字符串
+
+
+
+#### 205. Isomorphic Strings
+
+```cpp
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        int n=s.size();
+        if(n!=t.size()) return false;
+        vector<int> sm(128, 0);
+        vector<int> pm(128, 0);
+        for(int i=0;i<n;++i){
+            if(sm[s[i]]!=pm[t[i]]) 
+                return false;
+            sm[s[i]]=pm[t[i]]=i+1;
+        }
+        return true;
+    }
+};
+```
+
+
+
+```cpp
+class Solution {
+public:
+    bool isIsomorphic(string s, string t) {
+        int n=s.size();
+        if(n!=t.size()) return false;
+        vector<int> sm(128, 0);
+        vector<int> pm(128, 0);
+        for(int i=0;i<n;++i){
+            if(sm[s[i]]!=pm[t[i]]) 
+                return false;
+            sm[s[i]]=pm[t[i]]=i+1;
+        }
+        return true;
+    }
+};
+```
+
