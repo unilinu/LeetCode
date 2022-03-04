@@ -1495,3 +1495,29 @@ public:
 };
 ```
 
+## 指针三剑客之链表
+
+### 206. Reverse Linked List
+
+```cpp
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+        ListNode* prev=nullptr;
+        while(head!=nullptr){
+            ListNode* next=head->next;
+            head->next=prev;
+            prev=head;
+            head=next;
+        }
+        return prev;
+    }
+    // ListNode* reverseList(ListNode* head, ListNode* prev=nullptr) {
+    //     if(head==nullptr) return prev;
+    //     ListNode* next=head->next;
+    //     head->next=prev;
+    //     return reverseList(next, head);
+    // }
+};
+```
+
