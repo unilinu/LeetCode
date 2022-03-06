@@ -1517,6 +1517,78 @@ public:
 };
 ```
 
+### 21. Merge Two Sorted Lists
+
+```cpp
+class Solution {
+public:
+    // ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+    //     ListNode *tail=new ListNode(), *head=tail;
+    //     while(list1 || list2){
+    //         if(!list1 || list2&&(list1->val>list2->val)){
+    //             tail->next=list2;
+    //             list2=list2->next;
+    //         }
+    //         else {
+    //             tail->next=list1;
+    //             list1=list1->next;
+    //         }
+    //         tail=tail->next;
+    //     }
+    //     return head->next;
+    // }
+    ListNode* mergeTwoLists(ListNode* list1, ListNode* list2) {
+        if(!list1)
+            return list2;
+        if(!list2)
+            return list1;
+        if(list1->val > list2->val){
+            list2->next=mergeTwoLists(list1, list2->next);
+            return list2;
+        }
+        list1->next=mergeTwoLists(list1->next, list2);
+        return list1;
+    }
+    
+};
+```
+
+
+
+### 234. Palindrome Linked List
+
+```cpp
+class Solution {
+public:
+    bool isPalindrome(ListNode* head) {
+        // list转vector更快 学会选择最优数据结构
+        ListNode *fast=head, *slow=head;
+        while(fast && fast->next){
+            fast=fast->next->next;
+            slow=slow->next;
+        }
+        
+        ListNode *rhead=nullptr, *next;
+        while(slow){
+            next=slow->next;
+            slow->next=rhead;
+            rhead=slow;
+            slow=next;
+            
+        }
+        while(head && rhead){
+            if(head->val!=rhead->val)
+                return false;
+            head=head->next;
+            rhead=rhead->next;
+        }
+        return true;
+    }
+};
+```
+
+
+
 ## 12. 树
 
 **todo**
