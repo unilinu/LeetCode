@@ -1587,11 +1587,62 @@ public:
 };
 ```
 
+### 24. Swap Nodes in Pairs
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* swapPairs(ListNode* head) {
+        // recursive
+        if(!head||!head->next) return head;
+        ListNode *next=head->next;
+        head->next=swapPairs(next->next);
+        next->next=head;
+        return next;
+        // loop
+//         ListNode *cur=head, *next, *tail=new ListNode();
+//         if(head&&head->next)
+//             head=head->next;
+//         while(cur && cur->next){
+//             next=cur->next;
+//             tail->next=next; 
+//             cur->next=next->next;
+//             next->next=cur;
+            
+//             tail=cur;
+//             cur=cur->next;
+//         }
+//         return head;
+    }
+};
+```
+
 
 
 ## 12. 树
 
-**todo**
+### ### 104. Maximum Depth of Binary Tree
+
+```cpp
+class Solution {
+public:
+    int maxDepth(TreeNode* root) {
+        return root?1+max(maxDepth(root->left), maxDepth(root->right)):0;
+    }
+};
+```
+
+
 
 
 
