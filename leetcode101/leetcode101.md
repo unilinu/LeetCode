@@ -1626,6 +1626,62 @@ public:
     }
 };
 ```
+### 148. 排序链表
+
+指针快排方式的链表排序，注意规避最坏情况。
+建议链表排序使用归并排序
+```cpp
+class Solution {
+public:
+    ListNode* sortList(ListNode *head) {
+        ListNode *fake=new ListNode();
+        fake->next=head;
+        return sortList(fake, nullptr); // 给链表添加一个辅助头和辅助尾，即左右都不包含，开区间排序
+    }
+    ListNode* sortList(ListNode *fake, ListNode *tail) {
+        // if(!fake) return fake; // the fake never fakes
+        ListNode *head=fake->next;
+        if(head==tail || head->next==tail) return head;
+
+        // 交换链表中点和首点，避免增序最坏情况
+        ListNode *fast=head, *slow=head, *tmp;
+        while(fast!=tail && fast->next!=tail){
+            fast=fast->next->next;
+            slow=slow->next;
+        }
+        if(slow->next!=tail){ // 交换head和slow->next
+            tmp=slow->next->next;
+            fake->next=slow->next;
+            slow->next->next=head->next;
+            slow->next=head;
+            head->next=tmp;
+
+            head=fake->next; // head重定向
+        }
+
+        ListNode *pivot=head, *cur=head, *prev;
+        while(cur->next!=tail){
+            prev=cur;
+            while (cur->next!=tail && cur->next->val < pivot->val){ // 连续
+                cur=cur->next;
+            }
+            if(prev!=cur){ // 互换
+                tmp=cur->next;
+                cur->next=head;
+                head=prev->next;
+                prev->next=tmp;
+                fake->next=head;
+                cur=prev; // 只剔除
+            } else {
+                cur=cur->next; // 只前进
+            }
+        }
+        head=sortList(fake, pivot); // 开区间
+        tmp=sortList(pivot, tail); // 开区间
+        return head?head:pivot;
+    }
+};
+```
 
 
 
