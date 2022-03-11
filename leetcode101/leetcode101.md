@@ -1687,7 +1687,7 @@ public:
 
 ## 12. 树
 
-### ### 104. Maximum Depth of Binary Tree
+### 104. Maximum Depth of Binary Tree
 
 ```cpp
 class Solution {
@@ -1698,7 +1698,25 @@ public:
 };
 ```
 
-
+### 110. 平衡二叉树
+```cpp
+class Solution {
+public:
+    bool isBalanced(TreeNode* root) {
+        if(getMaxDepth(root)==-1) return false;
+        return true;
+    }
+    int getMaxDepth(TreeNode *root){
+        if(!root) return 0;
+        int l=getMaxDepth(root->left);
+        if(l==-1) return -1;
+        int r=getMaxDepth(root->right);
+        if(r==-1) return -1;
+        if(abs(l-r)>1) return -1;
+        return max(l, r)+1;
+    }
+};
+```
 
 
 
