@@ -1703,8 +1703,7 @@ public:
 class Solution {
 public:
     bool isBalanced(TreeNode* root) {
-        if(getMaxDepth(root)==-1) return false;
-        return true;
+        return getMaxDepth(root)!=-1; // 求深度可以判断是否平衡
     }
     int getMaxDepth(TreeNode *root){
         if(!root) return 0;
@@ -1714,6 +1713,43 @@ public:
         if(r==-1) return -1;
         if(abs(l-r)>1) return -1;
         return max(l, r)+1;
+    }
+};
+```
+### 543. Diameter of Binary Tree
+```cpp
+class Solution {
+public:
+    int diameterOfBinaryTree(TreeNode* root) {
+        int diam=0;
+        helper(root, diam);
+        return diam;
+    }
+    int helper(TreeNode *root, int &diam){
+        if(!root) return 0;
+        int l=helper(root->left, diam);
+        int r=helper(root->right, diam);
+        diam=max(diam, l+r);
+        return max(l, r)+1;
+    }
+};
+```
+### 437. Path Sum III
+```cpp
+class Solution {
+public:
+    int pathSum(TreeNode* root, int sum) {
+        if(!root) return 0;
+        return pathSum(root->right, sum) + pathSum(root->left, sum) +
+            pathWithRoot(root, sum);
+    }
+    int pathWithRoot(TreeNode *root, int sum){
+        if(!root) return 0;
+        sum-=root->val;
+        int cnt=sum==0? 1: 0;
+        cnt+=pathWithRoot(root->left, sum);
+        cnt+=pathWithRoot(root->right, sum);
+        return cnt;
     }
 };
 ```
