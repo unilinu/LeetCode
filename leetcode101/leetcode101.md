@@ -1449,6 +1449,78 @@ public:
 
 ## 10. 字符串
 
+### class String
+```cpp
+#include<iostream>
+#include<vector>
+using namespace std;
+class String {
+    int len;
+    char *str;
+public:
+    String():len(0), str(nullptr) {}
+    String(int len, const char *str):len(0), str(nullptr){
+        if(len<=0) return;
+        this->len=len;
+        this->str=new char[len];
+        for(int i=0;i<len;++i)
+            *(this->str+i)=*(str+i);
+    }
+    String(const String& oth):len(oth.len), str(nullptr){
+        if(len<=0) return;
+        str=new char[len];
+        for(int i=0;i<len;++i)
+            *(str+i)=*(oth.str+i);
+    }
+
+    String& operator=(const String& oth){
+        if(&oth==this) return *this;
+        delete [] str;
+        str=nullptr;
+        len=oth.len;
+        str=new char[len];
+        for(int i=0;i<len;++i)
+            *(str+i)=*(oth.str+i);
+        return *this;
+    }
+    ~String(){
+        cout<<"deconstructing ";
+        this->print();
+        delete [] str;
+        len=0;
+        str=nullptr;
+
+    }
+    void print() const {
+        if(len==0)
+            cout<<'"'<<'"'<<endl;
+        else {
+            cout<<'"';
+            for(int i=0;i<len;++i)
+                cout<<*(str+i);
+            cout<<'"'<<endl;
+        }
+    }
+};
+int main(){
+    char str[]="abc";
+    String s1;
+    String s2(3, str);
+    String s3(s2);
+    s1.print();
+    s2.print();
+    s3.print();
+    s1=s2;
+    s1.print();
+    auto *p=new int [10];
+    cout<<p[5]<<endl;
+    delete p;
+
+    return 0;
+
+}
+```
+
 
 
 #### 205. Isomorphic Strings
