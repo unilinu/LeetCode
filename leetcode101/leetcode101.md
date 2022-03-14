@@ -528,6 +528,53 @@ public:
 ```
 
 ## 4. 排序
+### 比较函数
+```cpp
+#include "stdc++.h"
+using namespace std;
+
+template <typename T>
+struct CompObj {
+    bool operator() (T &l, T&r){
+        return l<r;
+    }
+};
+
+class iint {
+    int _i;
+public:
+    iint(int i):_i(i) {}
+    bool operator<(const iint &r) const {
+        return this->_i<r._i;
+    }
+
+    template <typename T>
+    static bool CompFunc(T &l, T &r){
+        return r<l;
+    }
+    friend ostream& operator<<(ostream&, iint&);
+
+};
+ostream& operator<<(ostream& os, iint& ii){
+    os<<ii._i;
+    return os;
+}
+int main(){
+    vector<iint> v{3,2,1,4};
+    list<iint> l{6,7,8,5};
+    sort(v.begin(), v.end()); // operator <
+    for(auto i:v) cout<<i<<' '; cout<<endl; // 1 2 3 4
+
+    sort(v.begin(), v.end(), iint::CompFunc<iint>);// static compfunc -> operator <
+    for(auto i:v) cout<<i<<' '; cout<<endl;// 4 3 2 1
+
+    l.sort(CompObj<iint>());// global compobj -> operator <
+    for(auto i:l) cout<<i<<' '; cout<<endl;// 5 6 7 8
+
+    l.sort(iint::CompFunc<iint>);// static compfunc -> operator <
+    for(auto i:l) cout<<i<<' '; cout<<endl;// 8 7 6 5
+}
+```
 
 ### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
 
