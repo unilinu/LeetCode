@@ -1493,6 +1493,24 @@ public:
     }
 };
 ```
+### 前缀和与积分图
+#### 560. Subarray Sum Equals K
+```cpp
+class Solution {
+public:
+    int subarraySum(vector<int>& nums, int k) {
+        unordered_map<int, int> mapping;
+        int cnt=0, psum=0;
+        mapping[0]=1;
+        for(auto num:nums){
+            psum+=num;
+            cnt+=mapping[psum-k];
+            ++mapping[psum];
+        }
+        return cnt;
+    }
+};
+```
 
 ## 10. 字符串
 
@@ -1872,8 +1890,69 @@ public:
     }
 };
 ```
+### 1110. Delete Nodes And Return Forest
+```cpp
+class Solution {
+public:
+    // 主函数
+    vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {
+        vector<TreeNode*> forest;
+        unordered_set<int> dict(to_delete.begin(), to_delete.end());
+        root = helper(root, dict, forest);
+        if (root) {
+           forest.push_back(root);
+        }
+        return forest;
+    }
+    // 辅函数
+    TreeNode* helper(TreeNode* root, unordered_set<int> & dict, vector<TreeNode*> & forest) {
+        if (!root) {
+           return root;
+        }
+        root->left = helper(root->left, dict, forest);
+        root->right = helper(root->right, dict, forest);
+        if (dict.count(root->val)) {
+           if (root->left) {
+               forest.push_back(root->left);
+           }
+           if (root->right) {
+               forest.push_back(root->right);
+           }
+            root = NULL; 
+        }
+        return root;
+    }
+};
+```
 
+```cpp
+class Solution {
+public:
+    vector<TreeNode*> delNodes(TreeNode* root, vector<int>& to_delete) {
+        unordered_set<int> del_set(to_delete.begin(), to_delete.end());
+        vector<TreeNode*> ans;
+        helper(root, true, del_set, ans);
+        return ans;
+    }
+    TreeNode* helper(TreeNode *root, bool p_is_null, unordered_set<int> &del_set, vector<TreeNode*> &ans) {
+        if(!root) return root;
+        TreeNode *res=root;
+        if(del_set.count(root->val)) {
+            res=nullptr;
+            p_is_null= true;
+        }   
+        else if(p_is_null) {
+            ans.push_back(root);
+            p_is_null=false;
+        }
 
+        root->left = helper(root->left, p_is_null, del_set, ans);
+        root->right = helper(root->right, p_is_null, del_set, ans);
+        return res;
+    }
+};
+
+```
 
 ## 13. 图
 
