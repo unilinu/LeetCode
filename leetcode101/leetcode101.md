@@ -1953,7 +1953,44 @@ public:
 };
 
 ```
+105. Construct Binary Tree from Preorder and Inorder Traversal
+```cpp
+class Solution {
+public:
+    TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
+        if(preorder.empty()) return nullptr;
+        unordered_map<int, int> hash;
+        for(int i=0;i<inorder.size();++i){
+            hash[inorder[i]]=i;
+        }
 
+        return helper(preorder, 0, hash, 0, inorder.size()-1);
+
+    }
+    TreeNode* helper(vector<int> &preorder, int rt_i, unordered_map<int, int> &hash, int st_i, int end_i){
+        if(st_i>end_i) return nullptr;
+        int pre_rt=preorder[rt_i], mid_i=hash[pre_rt];
+        TreeNode *root=new TreeNode(pre_rt);
+        root->left=helper(preorder, rt_i+1, hash, st_i, mid_i-1);
+        root->right=helper(preorder, rt_i+mid_i-st_i+1, hash, mid_i+1, end_i);
+        return root;
+    }
+};
+```
+144. Binary Tree Preorder Traversal
+```cpp
+class Solution {
+    vector<int> ans;
+public:
+    const vector<int>& preorderTraversal(TreeNode* root) {
+        if(!root) return ans;
+        ans.push_back(root->val);
+        preorderTraversal(root->left);
+        preorderTraversal(root->right);
+        return ans;
+    }
+};
+```
 ## 13. 图
 
 **todo**
