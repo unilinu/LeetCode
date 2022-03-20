@@ -1991,6 +1991,128 @@ public:
     }
 };
 ```
+669. Trim a Binary Search Tree
+
+```cpp
+class Solution {
+public:
+    TreeNode* trimBST(TreeNode* root, int low, int high) {
+        if(!root) return nullptr;
+        if(root->val<low)
+            return trimBST(root->right, low, high);
+        if(root->val>high)
+            return trimBST(root->left, low, high);
+        root->left=trimBST(root->left, low, high);
+        root->right=trimBST(root->right, low, high);
+        return root;
+    }
+};
+```
+### 144. Binary Tree Preorder Traversal
+class Solution {
+    vector<int> ans;
+public:
+    const vector<int>& preorderTraversal(TreeNode* root) {
+        if(!root) return ans;
+        stack<TreeNode*> s;
+        s.push(root);
+        while(!s.empty()){
+            root=s.top();
+            if(root){
+                ans.push_back(root->val);
+                s.pop();
+                s.push(root->right);
+                s.push(root->left);
+            } else {
+                s.pop();
+            }
+        }
+        return ans;
+    }
+};
+### 二叉查找树
+```cpp
+template<typename T>
+class BST {
+    struct TreeNode {
+        T data;
+        TreeNode *left;
+        TreeNode *right;
+    };
+    TreeNode *root;
+
+    TreeNode *insert(TreeNode *node, T x) {
+        if (!node) {
+            node = new TreeNode;
+            node->data = x;
+            node->left = node->right = nullptr;
+            return node;
+        }
+        if (x < node->data) node->left = insert(node->left, x);
+        else node->right = insert(node->right, x);
+        return node;
+
+    }
+
+    TreeNode *remove(TreeNode *node, T x) {
+        TreeNode *temp;
+        if (!node) return node;
+        if (x < node->data) node->left = remove(node->left, x);
+        else if (x > node->data) node->right = remove(node->right, x);
+        else if (node->left && node->right) {
+            tmep = findMin(root->right);
+            node->data = temp->data;
+            node->right = remove(node->right, node->data);
+        } else {
+            temp = node;
+            if (!node->left) node = node->right;
+            else node = node->left;
+            delete temp;
+        }
+        return node;
+    }
+
+    TreeNode *find(TreeNode *node, T x) {
+        if (node == nullptr) return nullptr;
+        if (x < t->data) return find(node->left, x);
+        if (x > t->data) return find(node->right, x);
+        return node;
+    }
+
+    TreeNode *findMin(TreeNode *node) {
+        if (!root || !root->left) return root;
+        return findMin(root->left);
+    }
+
+    TreeNode *findMax(TreeNode *node) {
+        if (!root || !root->right) return root;
+        return findMax(root->right);
+    }
+
+    TreeNode *makeEmpty(TreeNode *node) {
+        if (!root) return nullptr;
+        makeEmpty(node->left);
+        makeEmpty(node->right);
+        delete node;
+        return nullptr;
+    }
+
+public:
+    BST() : root(nullptr) {}
+
+    ~BST() {
+        root = makeEmpty(root);
+    }
+
+    void insert(T x) {
+        insert(root, x);
+    }
+
+    void remove(T x) {
+        remove(root, x);
+    }
+};
+```
 ## 13. 图
 
 **todo**
