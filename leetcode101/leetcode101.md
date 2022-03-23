@@ -2114,5 +2114,68 @@ public:
 };
 ```
 ## 13. 图
+### 785. Is Graph Bipartite?
+```cpp
+class Solution {
+public:
+    bool isBipartite(vector<vector<int>>& graph) {
+        int n=graph.size(), cur;
+        vector<int> color(n, 0);
+        queue<int> q;
+        for(int i=0;i<n;++i){
+            if(color[i]==0) {
+                color[i]=1;
+                q.push(i);
+                while(!q.empty()){
+                    cur=q.front();
+                    q.pop();
+                    for(auto next:graph[cur]){
+                        if(color[next]==0){
+                            color[next]=color[cur]==1?2:1;
+                            q.push(next);
+                        }
+                        else if(color[next]==color[cur]) return false;
+                    }
+                }
+            }   
+        }
+        return true;
+    }
+};
+```
+### 210. Course Schedule II
+```cpp
 
-**todo**
+```
+## 复杂数据结构
+
+### UF - union-find 
+> 684. Redundant Connection
+```cpp
+class Solution {
+public:
+    vector<int> findRedundantConnection(vector<vector<int>>& edges) {
+        int n=edges.size();
+        vector<int> par(n);
+        for(int i=0;i<n;++i) par[i]=i;
+        int tree1, tree2;
+        for(auto edge:edges){
+            tree1=uf_find(edge[0]-1, par);
+            tree2=uf_find(edge[1]-1, par);
+            if(tree1==tree2) return edge;
+            uf_union(tree1, tree2, par);
+        }
+        return vector<int>{};   
+    }
+    int uf_find(int ch, vector<int>& par){
+        if(par[ch]==ch) return ch;
+        return par[ch]=uf_find(par[ch], par);
+    }
+    void uf_union(int tree1, int tree2, vector<int>& par){
+        par[tree1]=tree2;
+    }
+}
+```
+### LRU 
+146. LRU Cache
+
