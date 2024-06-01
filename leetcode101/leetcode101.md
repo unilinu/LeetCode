@@ -1,3 +1,9 @@
+
+
+# Code101
+
+[toc]
+
 ## 1. 贪心
 
 ### 455 Assign cookies (easy)
@@ -19,8 +25,82 @@ public:
 };
 ```
 
-
 ### 135 Candy (hard)
+
+- Solution 1
+
+```go
+// candy2 initializes every rating with 1 candy,
+// and then from left to right to update by comparing with the left side
+// and from right to left to update by comparing with the right side
+func candy(ratings []int) int {
+	candies := make([]int, len(ratings))
+	for i := range candies {
+		candies[i] = 1
+	}
+
+	for i := 1; i < len(ratings); i++ {
+		if ratings[i] > ratings[i-1] && candies[i] <= candies[i-1] {
+			candies[i] = candies[i-1] + 1
+		}
+	}
+	for i := len(ratings) - 2; i >= 0; i-- {
+		if ratings[i] > ratings[i+1] && candies[i] <= candies[i+1] {
+			candies[i] = candies[i+1] + 1
+		}
+	}
+
+	res := 0
+	for _, i := range candies {
+		res += i
+	}
+
+	return res
+}
+```
+
+
+
+- Solution 2
+
+```go
+// candy2 initializes every rating with 1 candy,
+// and then from the least to the most,
+// make the ratings at left and right sides suited one by one
+func candy2(ratings []int) int {
+	greedy := make([]int, len(ratings))
+	for i := range greedy {
+		greedy[i] = i
+	}
+	sort.Slice(greedy, func(i, j int) bool {
+		return ratings[greedy[i]] < ratings[greedy[j]]
+	})
+
+	candies := make([]int, len(ratings))
+	for i := range candies {
+		candies[i] = 1
+	}
+	for _, i := range greedy {
+		// ensure left side
+		if i > 0 && ratings[i-1] > ratings[i] && candies[i-1] <= candies[i] {
+			candies[i-1] = candies[i] + 1
+		}
+		// ensure right side
+		if i < len(ratings)-1 && ratings[i+1] > ratings[i] && candies[i+1] <= candies[i] {
+			candies[i+1] = candies[i] + 1
+		}
+	}
+
+	res := 0
+	for _, val := range candies {
+		res += val
+	}
+
+	return res
+}
+```
+
+
 
 ```cpp
 class Solution {
@@ -497,6 +577,42 @@ public:
 
 
 #### 81. Search in Rotated Sorted Array II
+
+```go
+func search(nums []int, target int) bool {
+	for l, r := 0, len(nums); l < r; {
+		mid := l + (r-l)/2
+		if nums[mid] == target {
+			return true
+		}
+		if target < nums[mid] {
+			if nums[l] > nums[mid] {
+				r = mid
+			} else if nums[l] == nums[mid] {
+				l++
+			} else if nums[l] <= target {
+				r = mid
+			} else {
+				l = mid + 1
+			}
+		} else {
+			if nums[r-1] < nums[mid] {
+				l = mid + 1
+			} else if nums[r-1] == nums[mid] {
+				r--
+			} else if nums[r-1] >= target {
+				l = mid + 1
+			} else {
+				r = mid
+			}
+
+		}
+	}
+	return false
+}
+```
+
+
 
 ```cpp
 class Solution {
