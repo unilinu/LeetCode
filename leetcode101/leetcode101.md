@@ -694,6 +694,43 @@ int main(){
 
 ### [215. 数组中的第K个最大元素](https://leetcode-cn.com/problems/kth-largest-element-in-an-array/)
 
+```go
+func findKthLargest(nums []int, k int) int {
+	// for i, n := 0, len(nums); i < n/2; i++ {
+	// 	nums[i], nums[n-1-i] = nums[n-1-i], nums[i]
+	// }
+
+	l, r := 0, len(nums)-1
+	for l < r {
+		for l < r && nums[r] >= nums[0] {
+			r--
+			// for optimization
+			if nums[l+1] <= nums[0] && l+1 < r {
+				l++
+			}
+		}
+		for l < r && nums[l] <= nums[0] {
+			l++
+		}
+		if l < r {
+			nums[l], nums[r] = nums[r], nums[l]
+		}
+	}
+	nums[r], nums[0] = nums[0], nums[r]
+
+	if l == len(nums)-k {
+		return nums[l]
+	} else if l < len(nums)-k {
+		return findKthLargest(nums[l+1:], k)
+	} else {
+		return findKthLargest(nums[:l], k-(len(nums)-l))
+	}
+}
+
+```
+
+
+
 ```python
 class Solution(object):
     def findKthLargest(self, nums, k):
