@@ -765,6 +765,25 @@ class Solution(object):
 
 ```
 ### 347. Top K Frequent Elements
+
+```go
+func topKFrequent(nums []int, k int) []int {
+	m := make(map[int]int)
+	for _, num := range nums {
+		m[num]++
+	}
+	keys := make([]int, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	sort.Slice(keys, func(i, j int) bool {
+		return m[keys[i]] < m[keys[j]]
+	})
+
+	return keys[len(keys)-k:]
+}
+```
+
 ```cpp
 347. Top K Frequent Elements
 class Solution {
