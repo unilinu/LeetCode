@@ -945,6 +945,33 @@ public:
 
 
 
+### [77. 组合](https://leetcode.cn/problems/combinations/)
+
+```go
+func combine(n int, k int) [][]int {
+	var res [][]int
+	nums := make([]int, k)
+	backtracking(n, k, 1, nums, 0, &res)
+	return res
+}
+func backtracking(n, k, pos int, nums []int, level int, res *[][]int) {
+	if level == k {
+		temp := make([]int, k)
+		copy(temp, nums)
+		*res = append(*res, temp)
+		return
+	}
+
+	for i := pos; i <= n; i++ {
+		nums[level] = i
+		backtracking(n, k, i+1, nums, level+1, res)
+	}
+}
+
+```
+
+
+
 ### BFS
 
 #### 934. Shortest Bridge
