@@ -945,7 +945,7 @@ public:
 
 
 
-### [77. 组合](https://leetcode.cn/problems/combinations/)
+#### [77. 组合](https://leetcode.cn/problems/combinations/)
 
 ```go
 func combine(n int, k int) [][]int {
@@ -968,6 +968,51 @@ func backtracking(n, k, pos int, nums []int, level int, res *[][]int) {
 	}
 }
 
+```
+
+#### [51. N 皇后](https://leetcode.cn/problems/n-queens/)
+
+```go
+func solveNQueens(n int) [][]string {
+	var ans [][]string
+	cols, ld, rd := make([]int, n), make([]int, 2*n-1), make([]int, 2*n-1)
+
+	board := make([]string, n)
+	temp := make([]byte, n)
+	for i := range temp {
+		temp[i] = byte('.')
+	}
+	for i := range board {
+		board[i] = string(temp)
+	}
+
+	backtracking(n, 0, board, cols, ld, rd, &ans)
+	return ans
+}
+func backtracking(n, row int, board []string, cols, ld, rd []int, ans *[][]string) {
+	if row == n {
+		temp := make([]string, n)
+		copy(temp, board)
+		*ans = append(*ans, temp)
+		return
+	}
+
+	for col := 0; col < n; col++ {
+		if cols[col] == 0 && ld[row+col] == 0 && rd[row-col+n-1] == 0 {
+			temp := []byte(board[row])
+			temp[col] = byte('Q')
+			board[row] = string(temp)
+
+			cols[col], ld[row+col], rd[row-col+n-1] = 1, 1, 1
+			backtracking(n, row+1, board, cols, ld, rd, ans)
+
+			cols[col], ld[row+col], rd[row-col+n-1] = 0, 0, 0
+			temp[col] = byte('.')
+			board[row] = string(temp)
+
+		}
+	}
+}
 ```
 
 
