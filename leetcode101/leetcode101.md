@@ -912,6 +912,43 @@ public:
 
 #### 46. Permutations
 
+```go
+func permute(nums []int) [][]int {
+	var permutes = [][]int{{}}
+
+	for {
+		done := true
+		for _, ans := range permutes {
+			if len(ans) != len(nums) {
+				done = false
+				break
+			}
+		}
+		if done {
+			break
+		}
+
+		var tmps [][]int
+		for _, ans := range permutes {
+			used := make(map[int]bool)
+			for _, num := range ans {
+				used[num] = true
+			}
+			for _, num := range nums {
+				if _, ok := used[num]; ok {
+					continue
+				}
+				tmps = append(tmps, append(ans, num))
+			}
+		}
+
+		permutes = tmps
+	}
+
+	return permutes
+}
+```
+
 ```cpp
 class Solution {
 public:
