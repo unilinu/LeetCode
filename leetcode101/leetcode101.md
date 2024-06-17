@@ -1186,6 +1186,66 @@ public:
 
 ## 6. DP
 
+
+
+[413. 等差数列划分](https://leetcode.cn/problems/arithmetic-slices/)
+
+```go
+func numberOfArithmeticSlices(nums []int) int {
+	n := len(nums)
+	if n < 3 {
+		return 0
+	}
+
+	dp := make([]int, len(nums))
+	for i := 2; i < n; i++ {
+		if nums[i]+nums[i-2] == 2*nums[i-1] {
+			dp[i] = dp[i-1] + 1 // 1 means new sub sequence 1-2,1-1,i
+		}
+	}
+
+	res := 0
+	for _, num := range dp {
+		res += num
+	}
+
+	return res
+}
+
+func numberOfArithmeticSlices2(nums []int) int {
+	if len(nums) < 3 {
+		return 0
+	}
+
+	tail := make([]int, len(nums))
+	tailN := make([]int, len(nums))
+	// if nums[0]+nums[2] == 2*nums[1] {
+	// 	tail[2] = 1
+	// 	tailN[2] = 3
+	// }
+
+	res := 0
+	for i := 2; i < len(nums); i++ {
+		if nums[i]+nums[i-2] == 2*nums[i-1] {
+			if tailN[i-1] == 0 {
+				tail[i] = 1
+				tailN[i] = 3
+			} else {
+				tail[i] = tailN[i-1] - 1 + tail[i-1]
+				tailN[i] = tailN[i-1] + 1
+			}
+		} else {
+			res += tail[i-1]
+		}
+
+	}
+
+	return res + tail[len(nums)-1]
+}
+```
+
+
+
 ### 二维
 
 #### 542. 01 Matrix
