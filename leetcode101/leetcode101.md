@@ -1250,6 +1250,56 @@ func numberOfArithmeticSlices2(nums []int) int {
 
 #### 542. 01 Matrix
 
+```go
+func updateMatrix(mat [][]int) [][]int {
+	m := len(mat)
+	if m == 0 {
+		return nil
+	}
+	n := len(mat[0])
+
+	for i := range mat {
+		for j := range mat[i] {
+			if mat[i][j] == 1 {
+				mat[i][j] = m + n // max distance value
+			}
+		}
+	}
+
+	min := func(a, b int) int {
+		if a < b {
+			return a
+		}
+		return b
+	}
+	// update for right and down direction
+	for i := 0; i < m; i++ {
+		for j := 0; j < n; j++ {
+			dirs := []int{0, 1, 0}
+			for k := range []int{0, 1} {
+				x, y := i+dirs[k], j+dirs[k+1]
+				if x >= 0 && x < m && y >= 0 && y < n {
+					mat[x][y] = min(mat[x][y], mat[i][j]+1)
+				}
+			}
+		}
+	}
+	// update for left and up direction from the bottom right point
+	for i := m - 1; i >= 0; i-- {
+		for j := n - 1; j >= 0; j-- {
+			dirs := []int{-1, 0, -1}
+			for k := range []int{0, 1} {
+				x, y := i+dirs[k], j+dirs[k+1]
+				if x >= 0 && x < m && y >= 0 && y < n {
+					mat[x][y] = min(mat[x][y], mat[i][j]+1)
+				}
+			}
+		}
+	}
+
+	return mat
+}
+```
 ```CPP
 class Solution {
 public:
