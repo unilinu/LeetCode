@@ -1335,6 +1335,44 @@ public:
 
 #### 221. Maximal Square
 
+```go
+func maximalSquare(matrix [][]byte) int {
+	if len(matrix) == 0 || len(matrix[0]) == 0 {
+		return 0
+	}
+
+	var maxEdge int
+
+	dp := make([][]int, len(matrix))
+	for i := range dp {
+		dp[i] = make([]int, len(matrix[0]))
+		dp[i][0] = int(matrix[i][0]) - int(byte('0'))
+		if dp[i][0] == 1 {
+			maxEdge = 1
+		}
+	}
+	for j := range dp[0] {
+		dp[0][j] = int(matrix[0][j]) - int(byte('0'))
+		if dp[0][j] == 1 {
+			maxEdge = 1
+		}
+	}
+
+	for i := 1; i < len(matrix); i++ {
+		for j := 1; j < len(matrix[0]); j++ {
+			if matrix[i][j] == byte('1') {
+				dp[i][j] = min(min(dp[i-1][j-1], dp[i-1][j]), dp[i][j-1]) + 1
+				if dp[i][j] > maxEdge {
+					maxEdge = dp[i][j]
+				}
+			}
+		}
+	}
+
+	return maxEdge * maxEdge
+}
+```
+
 ```cpp
 class Solution {
 public:
