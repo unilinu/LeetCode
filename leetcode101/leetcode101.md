@@ -1473,9 +1473,26 @@ public:
         return dp[n];  
     }
 };
-
-
 ```
+
+##### 139. 单词拆分
+
+```go
+func wordBreak(s string, wordDict []string) bool {
+	dp := make([]bool, len(s)+1)
+	dp[0] = true
+	for i := 1; i <= len(s); i++ {
+		for _, word := range wordDict {
+			if strings.HasSuffix(s[:i], word) {
+				dp[i] = dp[i] || dp[i-len(word)]
+			}
+		}
+	}
+
+	return dp[len(s)]
+}
+```
+
 ### 子序列
 #### 300. Longest Increasing Subsequence
 一维DP
