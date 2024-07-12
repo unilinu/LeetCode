@@ -1496,6 +1496,33 @@ func wordBreak(s string, wordDict []string) bool {
 ### 子序列
 #### 300. Longest Increasing Subsequence
 一维DP
+```go
+func lengthOfLIS(nums []int) int {
+	n := len(nums)
+	dp := make([]int, n)
+	for i := range dp {
+		dp[i] = 1
+	}
+	for i := 1; i < n; i++ {
+		res := 0
+		for j := 0; j < i; j++ {
+			if nums[i] > nums[j] {
+				res = max(res, dp[j])
+			}
+		}
+		if res > 0 {
+			dp[i] = res + 1
+		}
+	}
+
+	res := 0
+	for _, num := range dp {
+		res = max(res, num)
+	}
+	return res
+}
+```
+
 ```cpp
 class Solution {
 public:
