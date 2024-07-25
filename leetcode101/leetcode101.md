@@ -370,8 +370,33 @@ public:
     }
 };
 ```
+### 125. 验证回文串
+```go
+func isPalindrome(s string) bool {
+	ss := make([]byte, 0, len(s))
+	for _, c := range []byte(s) {
+		if c >= 'a' && c <= 'z' || c >= '0' && c <= '9' {
+			ss = append(ss, c)
+		}
+		if c >= 'A' && c <= 'Z' {
+			c = c - 'A' + 'a'
+			ss = append(ss, c)
+		}
 
+	}
 
+	for i, j := 0, len(ss)-1; i < j; {
+		if ss[i] == ss[j] {
+			i++
+			j--
+		} else {
+			return false
+		}
+	}
+
+	return true
+}
+```
 
 #### 680. 验证回文字符串 Ⅱ
 
