@@ -1523,6 +1523,22 @@ func wordBreak(s string, wordDict []string) bool {
 一维DP
 ```go
 func lengthOfLIS(nums []int) int {
+	dp := make([]int, 0, len(nums))
+	for _, n := range nums {
+		if len(dp) == 0 || dp[len(dp)-1] < n {
+			dp = append(dp, n)
+		} else {
+			j := sort.SearchInts(dp, n)
+			dp[j] = n
+		}
+	}
+
+	return len(dp)
+}
+```
+
+```go
+func lengthOfLIS(nums []int) int {
 	n := len(nums)
 	dp := make([]int, n)
 	for i := range dp {
@@ -1570,6 +1586,27 @@ public:
 ```
 #### 1143. Longest Common Subsequence
 二维DP
+```go
+func longestCommonSubsequence(text1 string, text2 string) int {
+	m, n := len(text1), len(text2)
+	dp := make([][]int, m+1)
+	for i := 0; i < m+1; i++ {
+		dp[i] = make([]int, n+1)
+	}
+	for i, c1 := range text1 {
+		for j, c2 := range text2 {
+			if c1 == c2 {
+				dp[i+1][j+1] = dp[i][j] + 1
+			} else {
+				dp[i+1][j+1] = max(dp[i][j+1], dp[i+1][j])
+			}
+		}
+	}
+
+	return dp[m][n]
+}
+
+```
 ```cpp
 class Solution {
 public:
