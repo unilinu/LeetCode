@@ -1625,6 +1625,69 @@ public:
     }
 };
 ```
+### 背包问题
+#### 416. 分割等和子集
+```go
+func canPartition(nums []int) bool {
+	sum := 0
+	for _, num := range nums {
+		sum += num
+	}
+	if sum%2 == 1 {
+		return false
+	}
+
+	m, n := len(nums), sum/2
+	dp := make([][]int, m+1)
+	for i := 0; i < m+1; i++ {
+		dp[i] = make([]int, n+1)
+	}
+	for i := 1; i <= m; i++ {
+		num := nums[i-1]
+		for j := 1; j <= n; j++ {
+			if j >= num {
+				dp[i][j] = max(dp[i-1][j], dp[i-1][j-num]+num)
+			} else {
+				dp[i][j] = dp[i-1][j]
+			}
+
+			if dp[i][j] == n {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+```
+```go
+func canPartition(nums []int) bool {
+	sum := 0
+	for _, num := range nums {
+		sum += num
+	}
+	if sum%2 == 1 {
+		return false
+	}
+
+	m, n := len(nums), sum/2
+	dp := make([]int, n+1)
+	for i := 1; i <= m; i++ {
+		num := nums[i-1]
+		for j := n; j >= num; j-- {
+			dp[j] = max(dp[j], dp[j-num]+num)
+
+			if dp[j] == n {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+```
+
+
 ### 编辑字符串
 #### 72. Edit Distance
 ```cpp
