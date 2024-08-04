@@ -31,7 +31,6 @@
 *.out
 *.app
 
-CodeSpace/
-ExamSpace/
-.DS_Store
-.idea
+**/.idea/
+**/.vscode/
+**/.DS_Store

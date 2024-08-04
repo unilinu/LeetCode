@@ -1,10 +1,11 @@
 package main
 
 import (
-	"fmt"
+	"container/heap"
 )
 
 func main() {
-	fmt.Println()
+
+	heap.Init()
 
 }
