@@ -500,6 +500,32 @@ public:
 
 ### 滑动窗口
 
+### 3. 无重复字符的最长子串
+
+```go
+func lengthOfLongestSubstring(s string) int {
+	if len(s) <= 1 {
+		return len(s)
+	}
+
+	res := 0
+	m := make(map[byte]bool)
+	for i, j := 0, 0; i <= j && j < len(s); {
+		for m[s[j]] {
+			delete(m, s[i])
+			i++
+		}
+		m[s[j]] = true
+		if res < j-i+1 {
+			res = j - i + 1
+		}
+		j++
+	}
+
+	return res
+}
+```
+
 #### 76. Minimum Window Substring
 
 ```cpp
